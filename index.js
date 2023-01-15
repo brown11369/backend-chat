@@ -15,7 +15,7 @@ app.use(express.json())
 app.use("/api/auth",userRoutes)
 app.use("/api/messsages",messagesRoutes)
 
-mongoose.connect(process.env.MONGO_URL,{
+mongoose.connect(process.env.MONGO_ONLINE_URL,{
     useNewUrlParser:true,
     useUnifiedTopology:true,
 })
@@ -34,7 +34,7 @@ const server=app.listen(process.env.PORT, () => {
 
 const io=socket(server,{
     cors: {
-        origin: "*",
+        origin: process.env.SOCKET_FRONTEND_URI,
         Credentials:true,
         methods: ["GET", "POST"],
     }
@@ -48,7 +48,6 @@ io.on("connection",(socket)=>{
     });
 
     socket.on("send-msg",(data)=>{
-        console.log(data)
         const sendUserSocket=onlineUsers.get(data.to)
         if(sendUserSocket){
             socket.to(sendUserSocket).emit("msg-recieve",data.message);

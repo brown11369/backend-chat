@@ -25,6 +25,7 @@ module.exports.login = async (req, res, next) => {
         return res.send({ status: true, userCheck })
     }
     catch (error) {
+        console.log(error)
         next(error)
     }
 };
